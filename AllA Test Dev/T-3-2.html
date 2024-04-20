@@ -1,0 +1,102 @@
+<!-- 테스트 : Div 내에서 마우스 우클릭 시, 마우스 우측에 새로운 Div 팝업 띄우기 -->
+<!-- 추가미션 : 팝업 Div 하위 팝업 띄우기 -->
+<!-- 즉, 마우스 우클릭 메뉴 만들기 -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        background-color: yellow;
+        width: 1000px;
+        height: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <!-- 여기에 내용이 들어갑니다. -->
+    </div>
+    <div id="popup" style="display: none; position: absolute; width: 100px; height: 100px; background-color: #ccc">
+      <div id="additionalPopup1" style="display: none; position: absolute; width: 100px; height: 100px; background-color: #f0f0f0">가 추가</div>
+      <div id="additionalPopup2" style="display: none; position: absolute; width: 100px; height: 100px; background-color: #f0f0f0">나 추가</div>
+      <p id="menu1">가</p>
+      <p id="menu2">나</p>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var container = document.getElementById('container');
+        var popup = document.getElementById('popup');
+        var menu1 = document.getElementById('menu1');
+        var menu2 = document.getElementById('menu2');
+        var additionalPopup1 = document.getElementById('additionalPopup1');
+        var additionalPopup2 = document.getElementById('additionalPopup2');
+
+        container.addEventListener('contextmenu', function (event) {
+          event.preventDefault(); // 기본 우클릭 메뉴를 막음
+          var x = event.pageX;
+          var y = event.pageY;
+          console.log(`x: ${x}, y: ${y}`);
+
+          popup.style.display = 'block';
+          popup.style.left = x + 10 + 'px'; // 10px 오른쪽에 위치
+          popup.style.top = y - 10 + 'px'; // 50px 위에 위치 (센터링을 위해 조절 가능)
+        });
+
+        menu1.addEventListener('click', function (event) {
+          event.stopPropagation(); // 부모의 클릭 이벤트로의 전파를 막음
+          additionalPopup1.style.display = 'block';
+
+          additionalPopup1.style.left = 100 + 'px'; // 첫 번째 팝업의 오른쪽에서 10px 오른쪽에 위치하도록 설정
+          additionalPopup1.style.top = 0 + 'px'; // 첫 번째 팝업의 상단에서 10px 위에 위치하도록 설정
+        });
+
+        menu2.addEventListener('click', function (event) {
+          event.stopPropagation(); // 부모의 클릭 이벤트로의 전파를 막음
+          additionalPopup2.style.display = 'block';
+
+          additionalPopup2.style.left = 100 + 'px'; // 첫 번째 팝업의 오른쪽에서 10px 오른쪽에 위치하도록 설정
+          additionalPopup2.style.top = 0 + 'px'; // 첫 번째 팝업의 상단에서 10px 위에 위치하도록 설정
+        });
+
+        // 추가로 마우스 위로 올라갔을 때의 이벤트
+
+        // 마우스가 additionalPopup1 위에 올라갔을 때
+        menu1.addEventListener('mouseenter', function (event) {
+          event.stopPropagation(); // 부모의 클릭 이벤트로의 전파를 막음
+          additionalPopup1.style.display = 'block';
+          additionalPopup1.style.left = 100 + 'px'; // 첫 번째 팝업의 오른쪽에서 10px 오른쪽에 위치하도록 설정
+          additionalPopup1.style.top = 0 + 'px'; // 첫 번째 팝업의 상단에서 10px 위에 위치하도록 설정
+        });
+
+        // 마우스가 additionalPopup1 밖으로 나갔을 때
+        menu1.addEventListener('mouseleave', function (event) {
+          // 1초 뒤에 추가 팝업1을 숨김
+          hideTimeout1 = setTimeout(function () {
+            additionalPopup1.style.display = 'none';
+          }, 1000); // 1000 밀리초 = 1초
+        });
+
+        additionalPopup1.addEventListener('mouseenter', function (event) {
+          event.stopPropagation(); // 부모의 클릭 이벤트로의 전파를 막음
+          clearTimeout(hideTimeout1); // 기존에 예약되어 있던 추가 팝업1 숨기기를 취소
+        });
+
+        document.addEventListener('click', function (event) {
+          popup.style.display = 'none'; // 첫 번째 팝업 숨김
+          additionalPopup1.style.display = 'none'; // 추가 팝업 숨김
+          additionalPopup2.style.display = 'none'; // 추가 팝업 숨김
+        });
+
+        // popup.addEventListener('click', function (event) {
+        //   additionalPopup1.style.display = 'none'; // 추가 팝업 숨김
+        //   additionalPopup2.style.display = 'none'; // 추가 팝업 숨김
+        // });
+      });
+    </script>
+  </body>
+</html>

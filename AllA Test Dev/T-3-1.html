@@ -1,0 +1,43 @@
+<!-- 테스트 : Div 내에서 마우스 우클릭 시, 마우스 우측에 새로운 Div 팝업 띄우기 -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        background-color: yellow;
+        width: 1000px;
+        height: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <!-- 여기에 내용이 들어갑니다. -->
+    </div>
+    <div id="popup" style="display: none; position: absolute; width: 100px; height: 100px; background-color: #ccc">가나다라</div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var container = document.getElementById('container');
+        var popup = document.getElementById('popup');
+
+        container.addEventListener('contextmenu', function (event) {
+          event.preventDefault(); // 기본 우클릭 메뉴를 막음
+          var x = event.pageX;
+          var y = event.pageY;
+
+          popup.style.display = 'block';
+          popup.style.left = x + 10 + 'px'; // 10px 오른쪽에 위치
+          popup.style.top = y - 10 + 'px'; // 10px 위에 위치 (센터링을 위해 조절 가능)
+        });
+
+        document.addEventListener('click', function (event) {
+          popup.style.display = 'none'; // 팝업 숨김
+        });
+      });
+    </script>
+  </body>
+</html>

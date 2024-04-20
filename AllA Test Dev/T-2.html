@@ -1,0 +1,102 @@
+<!-- 테스트 : Div 경계선 마우스로 드래그하여 리사이징 -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resizable Div</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+
+      .container {
+        display: flex;
+      }
+
+      .resizable {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 1px solid black;
+        overflow: hidden;
+      }
+
+      .additional-div {
+        flex-grow: 1;
+        background-color: lightblue;
+      }
+
+      .resizable::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 5px; /* 조절 핸들의 너비 */
+        height: 10px; /* 조절 핸들의 높이 */
+        background-color: transparent; /* 조절 핸들의 배경색 */
+        cursor: ew-resize; /* 조절 핸들의 커서 모양 */
+      }
+
+      .resizable:hover::after {
+        background-color: red; /* 마우스 오버시 조절 핸들의 배경색 */
+      }
+
+      /* 우측 변에 대한 조절 핸들 */
+      .resizable::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -5px;
+        width: 10px; /* 조절 핸들의 너비 */
+        height: 100%; /* 조절 핸들의 높이 */
+        background-color: transparent; /* 조절 핸들의 배경색 */
+        cursor: ew-resize; /* 조절 핸들의 커서 모양 */
+      }
+
+      /* 우측 변에 마우스 오버 시 배경색 변경 */
+      .resizable:hover::before {
+        background-color: red; /* 마우스 오버시 조절 핸들의 배경색 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="resizable" class="resizable">내용</div>
+      <div class="additional-div">Additional Content</div>
+    </div>
+
+    <script>
+      const resizable = document.getElementById('resizable');
+
+      let startX, startWidth;
+
+      let initResize = (e) => {
+        // 우측 변에서의 시작 위치와 너비를 저장합니다.
+        startX = e.clientX;
+        startWidth = parseInt(document.defaultView.getComputedStyle(resizable).width, 10);
+
+        // 우측 변에서의 이벤트만 처리합니다.
+        document.documentElement.addEventListener('mousemove', doResize, false);
+        document.documentElement.addEventListener('mouseup', stopResize, false);
+      };
+
+      let doResize = (e) => {
+        // 우측 변을 드래그하여 크기를 조정합니다.
+        const newWidth = startWidth + e.clientX - startX;
+        resizable.style.width = newWidth + 'px';
+      };
+
+      let stopResize = () => {
+        // 이벤트 리스너를 제거합니다.
+        document.documentElement.removeEventListener('mousemove', doResize, false);
+        document.documentElement.removeEventListener('mouseup', stopResize, false);
+      };
+
+      // 우측 변에만 이벤트 리스너를 추가합니다.
+      resizable.addEventListener('mousedown', initResize, false);
+    </script>
+  </body>
+</html>
